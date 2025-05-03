@@ -1,15 +1,12 @@
 from fastapi import FastAPI
+from app.routers import users, items
 
-from app.db import database, User
-
+from app.configs.db import database, User
 
 app = FastAPI(title="FastAPI, Docker, and Traefik")
 
-
-@app.get("/")
-async def read_root():
-    return await User.objects.all()
-
+app.include_router(users.router, prefix="/users", tags=["Users"])
+app.include_router(items.router, prefix="/items", tags=["Items"])
 
 @app.on_event("startup")
 async def startup():
