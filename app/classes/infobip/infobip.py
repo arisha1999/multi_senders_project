@@ -1,7 +1,9 @@
 import httpx
-
-class InfobipClient:
+from ..provider import NotificationProvider
+class InfobipClient(NotificationProvider):
     def __init__(self, api_key: str, base_url: str):
+        super().__init__()
+        self.name = 'Infobip'
         self.api_key = api_key
         self.base_url = base_url
         self.headers = {
@@ -24,7 +26,7 @@ class InfobipClient:
             response.raise_for_status()
             return response.json()["messages"][0]["messageId"]
 
-    async def make_call(self, to: str, audio_url: str, call_sender: str) -> str:
+    async def send_call(self, to: str, audio_url: str, call_sender: str) -> str:
         url = f"{self.base_url}/voice/1/calls"
         payload = {
             "from": call_sender,

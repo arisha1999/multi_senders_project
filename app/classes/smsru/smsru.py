@@ -1,8 +1,11 @@
 import aiohttp
-class SMSRuClient:
+from ..provider import NotificationProvider
+class SMSRuClient(NotificationProvider):
     BASE_URL = "https://sms.ru"
 
     def __init__(self, api_key: str):
+        super().__init__()
+        self.name = 'SMS.RU'
         self.api_key = api_key
 
     async def send_sms(self, to: str, message: str) -> str:
@@ -39,7 +42,7 @@ class SMSRuClient:
             }) as response:
                 return await response.json()
 
-    async def send_voice_call(self, phone: str, text: str) -> str:
+    async def send_call(self, phone: str, text: str) -> str:
         async with aiohttp.ClientSession() as session:
             async with session.get(f"{self.BASE_URL}/voice/send", params={
                 "api_id": self.api_key,

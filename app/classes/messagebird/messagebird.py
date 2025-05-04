@@ -1,7 +1,9 @@
 import messagebird
-
-class MessageBirdClient:
+from ..provider import NotificationProvider
+class MessageBirdClient(NotificationProvider):
     def __init__(self, api_key: str, originator: str):
+        super().__init__()
+        self.name = 'MessageBird'
         self.api_key = api_key
         self.originator = originator
         self.client = messagebird.Client(self.api_key)
@@ -14,7 +16,7 @@ class MessageBirdClient:
         )
         return msg.id
 
-    def make_call(self, source: str, destination: str) -> str:
+    def send_call(self, source: str, destination: str) -> str:
         call = self.client.voice_call_create(
             {
                 'source': source,

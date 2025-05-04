@@ -1,7 +1,10 @@
 import vonage
+from ..provider import NotificationProvider
 
-class NexmoClient:
+class NexmoClient(NotificationProvider):
     def __init__(self, api_key: str, api_secret: str):
+        super().__init__()
+        self.name = 'Nexmo'
         self.api_key = api_key
         self.api_secret = api_secret
 
@@ -19,7 +22,7 @@ class NexmoClient:
 
         return response["messages"][0]["message-id"]
 
-    def make_call(self, to: str, answer_url: str, from_number: str) -> str:
+    def send_call(self, to: str, answer_url: str, from_number: str) -> str:
         client = vonage.Client(key=self.api_key, secret=self.api_secret)
         voice = vonage.Voice(client)
         response = voice.create_call({
